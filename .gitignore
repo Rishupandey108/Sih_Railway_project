@@ -1,0 +1,78 @@
+# ==============================================================================
+# Indian Railways Maintenance AI System — Git Ignore Configuration
+# ==============================================================================
+
+# ── Secrets & Environment Configurations ──────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+
+# ── Synthetic Data & Generated Output Files ───────────────────────────────────
+# Ignore generated CSV datasets and schedule outputs
+data/*.csv
+data/*.json
+!data/.gitkeep
+
+# Specific generated data files
+data/tms_data.csv
+data/smms_data.csv
+data/tdms_data.csv
+data/coa_data.csv
+data/optimized_schedule.json
+
+# ── Trained Model Artifacts (.pkl, .joblib, etc.) ─────────────────────────────
+models/*.pkl
+models/*.joblib
+models/*.pth
+models/*.onnx
+!models/.gitkeep
+
+# Specific model binaries
+models/risk_model.pkl
+models/duration_model.pkl
+
+# ── Reports & Generated Visualizations ────────────────────────────────────────
+reports/*.png
+reports/*.jpg
+reports/*.pdf
+reports/*.html
+!reports/.gitkeep
+
+# ── Python Cache & Bytecode ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.python-version
+
+# ── Virtual Environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ── Testing & Coverage ────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+
+# ── Logs & Temporary Files ────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+*.swp
+
+# ── IDEs & Operating System Files ─────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

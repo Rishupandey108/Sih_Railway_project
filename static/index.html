@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Railways — Maintenance AI Operations Hub</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Marked.js for markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid => fa-train-subway"></i>
+      </div>
+      <div>
+        <div class="brand-title">RAILWAY AI OPS</div>
+        <div class="brand-subtitle">Indian Railways Predictive Systems</div>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <div class="nav-item active" data-tab="dashboard-tab">
+        <i class="fa-solid fa-gauge-high nav-icon"></i>
+        <span>Operations Hub</span>
+      </div>
+      <div class="nav-item" data-tab="field-predictor-tab">
+        <i class="fa-solid fa-calculator nav-icon"></i>
+        <span>Field Risk Assessor</span>
+      </div>
+      <div class="nav-item" data-tab="schedule-tab">
+        <i class="fa-solid fa-calendar-check nav-icon"></i>
+        <span>Optimized Schedule</span>
+      </div>
+      <div class="nav-item" data-tab="analytics-tab">
+        <i class="fa-solid fa-chart-pie nav-icon"></i>
+        <span>System Analytics</span>
+      </div>
+      <div class="nav-item" data-tab="copilot-tab">
+        <i class="fa-solid fa-robot nav-icon"></i>
+        <span>Gemini AI Copilot</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>API Status</div>
+      <div class="system-status">
+        <span class="pulse-dot"></span>
+        <span id="sys-status-text">Connecting...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Wrapper ──────────────────────────────────────────────────────── -->
+  <div class="main-wrapper">
+    
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="page-header">
+        <h1 id="page-title">Operations Hub & Asset Intelligence</h1>
+        <p id="page-desc">Real-time predictive risk scoring across TMS, SMMS, TDMS & COA</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn btn-glass" id="btn-refresh-data">
+          <i class="fa-solid fa-rotate-right"></i> Refresh
+        </button>
+        <button class="btn btn-primary" id="btn-trigger-pipeline">
+          <i class="fa-solid fa-bolt"></i> Re-Optimize Schedule
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Container -->
+    <main class="content-container">
+
+      <!-- ── TAB 1: OPERATIONS HUB ────────────────────────────────────────── -->
+      <section id="dashboard-tab" class="tab-content active">
+        <!-- KPI Row -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-info">
+              <h3>Total Assets Scanned</h3>
+              <div class="kpi-value" id="kpi-total-assets">11,000</div>
+              <div class="kpi-sub">Across 3 Core Systems</div>
+            </div>
+            <div class="kpi-icon blue"><i class="fa-solid fa-layer-group"></i></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-info">
+              <h3>Critical / High Risk</h3>
+              <div class="kpi-value" id="kpi-critical-count" style="color: var(--risk-critical)">2,703</div>
+              <div class="kpi-sub">Risk score &ge; 50%</div>
+            </div>
+            <div class="kpi-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-info">
+              <h3>Scheduled Tasks</h3>
+              <div class="kpi-value" id="kpi-scheduled-count" style="color: var(--primary)">69</div>
+              <div class="kpi-sub">OR-Tools CP-SAT Allocated</div>
+            </div>
+            <div class="kpi-icon cyan"><i class="fa-solid fa-calendar-check"></i></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-info">
+              <h3>Approved COA Blocks</h3>
+              <div class="kpi-value" id="kpi-coa-count" style="color: var(--risk-low)">1,278</div>
+              <div class="kpi-sub">Corridor Windows</div>
+            </div>
+            <div class="kpi-icon emerald"><i class="fa-solid fa-train-track"></i></div>
+          </div>
+        </div>
+
+        <!-- System Breakdown Pills -->
+        <div class="system-pills">
+          <div class="system-pill tms">
+            <div class="pill-title">TMS — Track Management System</div>
+            <div class="pill-count" id="pill-tms-count">5,000 Assets</div>
+            <div class="pill-desc">Track geometry, rail wear, ultrasonic flaws</div>
+          </div>
+
+          <div class="system-pill smms">
+            <div class="pill-title">SMMS — Signalling & Telecom</div>
+            <div class="pill-count" id="pill-smms-count">3,000 Assets</div>
+            <div class="pill-desc">Point machines, signals, axle counters</div>
+          </div>
+
+          <div class="system-pill tdms">
+            <div class="pill-title">TDMS — Traction Distribution</div>
+            <div class="pill-count" id="pill-tdms-count">3,000 Assets</div>
+            <div class="pill-desc">25kV OHE, contact wire, booster transformers</div>
+          </div>
+        </div>
+
+        <!-- High-Risk Assets Alert Feed -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-fire-flame-curved" style="color: var(--risk-critical)"></i>
+              Top High-Risk Assets Needing Maintenance
+            </div>
+            <div class="mono" style="font-size: 0.75rem; color: var(--text-dim)">Scored by XGBoost Risk Pipeline</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Asset ID</th>
+                  <th>System</th>
+                  <th>Zone</th>
+                  <th>Section</th>
+                  <th>Wear %</th>
+                  <th>Fault Count</th>
+                  <th>Risk Probability</th>
+                  <th>Est. Duration</th>
+                  <th>Risk Band</th>
+                </tr>
+              </thead>
+              <tbody id="top-risk-table-body">
+                <tr><td colspan="9" style="text-align: center; padding: 2rem;">Loading high-risk assets...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 2: FIELD RISK ASSESSOR ────────────────────────────────────── -->
+      <section id="field-predictor-tab" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-calculator" style="color: var(--primary)"></i>
+              Real-Time Field Inspection Risk Assessment
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted)">Input physical measurements from inspection logs to evaluate asset risk and duration</p>
+          </div>
+
+          <form id="risk-assessor-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Source Subsystem</label>
+                <select class="form-control" id="form-system">
+                  <option value="TMS">TMS (Track)</option>
+                  <option value="SMMS">SMMS (Signalling)</option>
+                  <option value="TDMS">TDMS (Traction/OHE)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Railway Zone</label>
+                <select class="form-control" id="form-zone">
+                  <option value="NR">NR (Northern)</option>
+                  <option value="SR">SR (Southern)</option>
+                  <option value="WR">WR (Western)</option>
+                  <option value="ER">ER (Eastern)</option>
+                  <option value="CR">CR (Central)</option>
+                  <option value="SCR">SCR (South Central)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Asset Age (Years)</label>
+                <input type="number" class="form-control" id="form-age" value="18.5" step="0.5" min="0" max="60">
+              </div>
+
+              <div class="form-group">
+                <label>Fault / Defect Count</label>
+                <input type="number" class="form-control" id="form-faults" value="6" min="0" max="30">
+              </div>
+
+              <div class="form-group">
+                <label>Days Since Inspection</label>
+                <input type="number" class="form-control" id="form-days" value="65" min="0" max="365">
+              </div>
+
+              <div class="form-group">
+                <label>Component Wear (%)</label>
+                <input type="number" class="form-control" id="form-wear" value="78.0" step="0.1" min="0" max="100">
+              </div>
+
+              <div class="form-group">
+                <label>Traffic Load (MGT)</label>
+                <input type="number" class="form-control" id="form-traffic" value="45.0" step="0.5" min="0" max="150">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-chart-line"></i> Predict Failure Risk & Repair Duration
+            </button>
+          </form>
+
+          <!-- Prediction Result Container -->
+          <div class="prediction-box" id="prediction-result-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+              <div>
+                <span class="badge" id="res-risk-band">CRITICAL</span>
+                <h2 style="font-size: 1.4rem; margin-top: 0.4rem;" id="res-asset-title">Assessment Result</h2>
+              </div>
+              <div class="gauge-val" id="res-risk-pct" style="color: var(--risk-critical)">94.5%</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid var(--border-card); padding-top: 1rem;">
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); uppercase;">Est. Maintenance Duration</div>
+                <div style="font-size: 1.5rem; font-weight: 700;" id="res-duration">6.4 Hours</div>
+              </div>
+
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); uppercase;">Action Recommendation</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--primary);" id="res-recommendation">Schedule immediate corridor maintenance block</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 3: OPTIMIZED SCHEDULE ─────────────────────────────────────── -->
+      <section id="schedule-tab" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-calendar-check" style="color: var(--primary)"></i>
+              CP-SAT Optimized Maintenance Schedule
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+              <select class="form-control" id="sched-filter-system" style="padding: 0.4rem 0.75rem;">
+                <option value="">All Systems</option>
+                <option value="TMS">TMS</option>
+                <option value="SMMS">SMMS</option>
+                <option value="TDMS">TDMS</option>
+              </select>
+              <select class="form-control" id="sched-filter-zone" style="padding: 0.4rem 0.75rem;">
+                <option value="">All Zones</option>
+                <option value="NR">NR</option>
+                <option value="SR">SR</option>
+                <option value="WR">WR</option>
+                <option value="ER">ER</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Task Asset ID</th>
+                  <th>System</th>
+                  <th>Section</th>
+                  <th>Risk Score</th>
+                  <th>Est. Duration</th>
+                  <th>Block Date</th>
+                  <th>Block Window</th>
+                  <th>Block Type</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-table-body">
+                <tr><td colspan="8" style="text-align: center; padding: 2rem;">Loading optimized schedule...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 4: SYSTEM ANALYTICS ───────────────────────────────────────── -->
+      <section id="analytics-tab" class="tab-content">
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-chart-bar"></i> Subsystem Defect & Risk Distribution</div>
+            </div>
+            <canvas id="system-dist-chart" height="220"></canvas>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Zone Schedule Allocation</div>
+            </div>
+            <canvas id="zone-pie-chart" height="220"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 5: GEMINI AI COPILOT ──────────────────────────────────────── -->
+      <section id="copilot-tab" class="tab-content">
+        <div class="chat-container">
+          <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <i class="fa-solid fa-robot" style="font-size: 1.2rem; color: var(--primary)"></i>
+              <div>
+                <div style="font-weight: 600;">Gemini Railway AI Copilot</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted)">Trained on Indian Railways Maintenance Schedules & Defect Knowledge</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages-list">
+            <div class="chat-bubble bot">
+              Hello! I am your AI Maintenance Assistant. Ask me anything about high-risk assets, scheduled blocks, or maintenance priorities across NR, SR, WR, and ER zones.
+            </div>
+          </div>
+
+          <div class="prompt-suggestions">
+            <span class="prompt-chip" onclick="askCopilot('Which track sections in NR zone need urgent attention?')">Which track sections in NR zone need urgent attention?</span>
+            <span class="prompt-chip" onclick="askCopilot('How many high risk TDMS assets are currently scheduled?')">How many high risk TDMS assets are scheduled?</span>
+            <span class="prompt-chip" onclick="askCopilot('Explain how OHE tension loss affects asset risk score')">Explain OHE tension loss risk impact</span>
+          </div>
+
+          <form id="copilot-form" class="chat-input-row">
+            <input type="text" class="form-control" id="copilot-input" placeholder="Type a natural language question..." style="flex: 1;">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-paper-plane"></i> Send
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Custom Javascript App -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
