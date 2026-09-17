@@ -180,13 +180,12 @@ Sih_Railway_project/
 
 ---
 
-## 🔑 Getting a Free Gemini API Key
+## 🔑 Getting a  Gemini API Key
 
-1. Go to **https://aistudio.google.com/app/apikey**
+1. Go to  google ai studio and get API
 2. Sign in with your Google account
 3. Click **"Create API Key"**
 4. Copy the key and paste it in your `.env` file:
    ```
    GEMINI_API_KEY=AIza...your_key_here
-   ```
-5. The free tier supports **60 requests/minute** — more than enough for this project.
+   ``
