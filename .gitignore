@@ -44,7 +44,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.python-version
 
 # ── Virtual Environments ──────────────────────────────────────────────────────
 .venv/
