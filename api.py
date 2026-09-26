@@ -90,12 +90,43 @@ app.add_middleware(
 if os.path.exists(STATIC_DIR):
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+@app.on_event("startup")
+async def startup_event():
+    """Checks if data and ML models exist on startup. Runs pipeline automatically if missing."""
+    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(MODEL_DIR, exist_ok=True)
+
+    data_missing = not all(
+        os.path.exists(os.path.join(DATA_DIR, f))
+        for f in ["tms_data.csv", "smms_data.csv", "tdms_data.csv", "coa_data.csv"]
+    )
+    models_missing = not all(
+        os.path.exists(os.path.join(MODEL_DIR, f))
+        for f in ["risk_model.pkl", "duration_model.pkl"]
+    )
+    schedule_missing = not os.path.exists(os.path.join(DATA_DIR, "optimized_schedule.json"))
+
+    if data_missing or models_missing or schedule_missing:
+        print("[Startup] Missing data or models detected. Running initialization pipeline...")
+        try:
+            import data_synthesizer
+            import ai_engine
+            import optimizer
+
+            data_synthesizer.main()
+            ai_engine.main()
+            optimizer.main()
+            print("[Startup] Pipeline initialization completed successfully.")
+        except Exception as e:
+            print(f"[Startup] Warning: Automatic pipeline initialization failed: {e}")
+
 @app.get("/", include_in_schema=False)
 async def serve_dashboard():
     index_path = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return {"message": "Railway Maintenance AI API — Web Dashboard static files missing."}
+
 
 
 
@@ -600,5 +631,6 @@ async def copilot_query(request: CopilotRequest):
 # ═══════════════════════════════════════════════════════════════════════════════
 if __name__ == "__main__":
     host = os.getenv("API_HOST", "0.0.0.0")
-    port = int(os.getenv("API_PORT", "8000"))
-    uvicorn.run("api:app", host=host, port=port, reload=True)
+    port = int(os.getenv("PORT", os.getenv("API_PORT", "8000")))
+    uvicorn.run("api:app", host=host, port=port, reload=False)
+
