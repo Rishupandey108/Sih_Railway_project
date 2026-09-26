@@ -1,76 +1,69 @@
 # Deployment Guide — Indian Railways Maintenance AI System
 
-This document provides step-by-step instructions for deploying the project to popular free and cloud hosting platforms (**Render**, **Railway**, **Hugging Face Spaces**, **Docker**, and **Vercel**).
+This document provides step-by-step instructions for deploying the project to popular free and cloud hosting platforms (**Vercel**, **Render**, **Railway**, **Hugging Face Spaces**, and **Docker**).
 
 ---
 
-## 🌟 Option 1: Render.com (Recommended Free Deployment)
+## 📐 Option 1: Vercel Deployment (Serverless)
 
-1. **Push your code to GitHub**:
-   Ensure your latest code is pushed to your GitHub repository:
+1. **Push your latest code to GitHub**:
    ```bash
    git add .
-   git commit -m "Add production deployment configurations"
+   git commit -m "Add Vercel deployment configuration"
    git push origin main
    ```
 
-2. **Create a New Web Service on Render**:
-   - Go to [Render Dashboard](https://dashboard.render.com/) and click **New +** -> **Web Service**.
-   - Connect your GitHub repository (`Sih_Railway_project`).
-   - Configure the following settings:
-     - **Name**: `railway-maintenance-ai`
-     - **Environment**: `Python 3`
-     - **Build Command**: `pip install -r requirements.txt`
-     - **Start Command**: `gunicorn api:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120`
+2. **Deploy on Vercel**:
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard) and click **Add New...** -> **Project**.
+   - Import your GitHub repository (`Sih_Railway_project`).
+   - Vercel will automatically detect `vercel.json` and use the `@vercel/python` builder for `api.py`.
 
 3. **Set Environment Variables**:
    - Under **Environment Variables**, add:
      - `GEMINI_API_KEY`: `your_actual_gemini_api_key`
 
 4. **Deploy**:
-   - Click **Create Web Service**. Render will automatically build the environment, run the pipeline on startup, and provide a public URL (e.g. `https://railway-maintenance-ai.onrender.com`).
+   - Click **Deploy**. Vercel will deploy your FastAPI app and static Operations Web Dashboard serverlessly on a global edge CDN URL (e.g. `https://sih-railway-project.vercel.app`).
 
 ---
 
-## 🚆 Option 2: Railway.app
+## 🌟 Option 2: Render.com (Web Service)
+
+1. Go to [Render Dashboard](https://dashboard.render.com/) -> **New +** -> **Web Service**.
+2. Select your repository (`Sih_Railway_project`).
+3. Render automatically picks up `render.yaml` and `Procfile`.
+4. Add `GEMINI_API_KEY` under Environment Variables and click **Create Web Service**.
+
+---
+
+## 🚆 Option 3: Railway.app
 
 1. Go to [Railway Dashboard](https://railway.app/).
 2. Click **New Project** -> **Deploy from GitHub repo**.
-3. Select `Sih_Railway_project`.
-4. Railway will automatically detect the `Procfile` and `requirements.txt`.
-5. Under **Variables**, add:
-   - `GEMINI_API_KEY`: `your_actual_gemini_api_key`
-6. Click **Deploy**. Under settings, click **Generate Domain** to get your public URL.
+3. Add `GEMINI_API_KEY` under **Variables** and generate your public domain.
 
 ---
 
-## 🤗 Option 3: Hugging Face Spaces (Docker)
+## 🤗 Option 4: Hugging Face Spaces (Docker)
 
-1. Go to [Hugging Face Spaces](https://huggingface.co/spaces) and click **Create new Space**.
-2. Select **Docker** as the Space SDK.
-3. Clone your Space repo locally or push your files including `Dockerfile` and `requirements.txt`.
-4. Add `GEMINI_API_KEY` under Space **Settings** -> **Repository Secrets**.
-5. Hugging Face will build the Docker container and host your FastAPI app and Web Dashboard.
+1. Create a new Space on [Hugging Face](https://huggingface.co/spaces) with **Docker** SDK.
+2. Push repository code including `Dockerfile` and `requirements.txt`.
+3. Add `GEMINI_API_KEY` under Space Repository Secrets.
 
 ---
 
-## 🐳 Option 4: Docker Local / VPS Deployment
-
-To run the application using Docker locally or on any Linux VPS:
+## 🐳 Option 5: Docker Container Deployment
 
 ```bash
-# 1. Build and run with Docker Compose
+# Build and run with Docker Compose
 docker compose up --build -d
-
-# 2. Access the Web Dashboard
-# http://localhost:8000/
 ```
 
 ---
 
 ## 🛠️ Verification After Deployment
 
-Once deployed, visit your live app URL:
+Once deployed, visit your live URL:
 - **Web Operations Dashboard**: `https://<your-app-domain>/`
 - **Health Check API**: `https://<your-app-domain>/health`
 - **Swagger Documentation**: `https://<your-app-domain>/docs`

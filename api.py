@@ -49,9 +49,17 @@ load_dotenv()   # reads GEMINI_API_KEY from .env file
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 BASE_DIR   = os.path.dirname(__file__)
-DATA_DIR   = os.path.join(BASE_DIR, "data")
-MODEL_DIR  = os.path.join(BASE_DIR, "models")
+IS_VERCEL  = os.getenv("VERCEL") == "1" or os.getenv("VERCEL_ENV") is not None
+
+if IS_VERCEL:
+    DATA_DIR  = "/tmp/data"
+    MODEL_DIR = "/tmp/models"
+else:
+    DATA_DIR  = os.path.join(BASE_DIR, "data")
+    MODEL_DIR = os.path.join(BASE_DIR, "models")
+
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+
 
 # ── Gemini setup ──────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
