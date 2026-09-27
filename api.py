@@ -231,6 +231,17 @@ def _load_coa() -> pd.DataFrame:
 
 def _load_all_assets() -> pd.DataFrame:
     """Loads and unifies TMS + SMMS + TDMS with ML scores."""
+    if "all_assets" in _cache:
+        return _cache["all_assets"]
+
+    precalculated_path = os.path.join(DATA_DIR, "assets_with_risk.csv")
+    if os.path.exists(precalculated_path):
+        df = pd.read_csv(precalculated_path)
+        if "risk_label" not in df.columns and "risk_probability" in df.columns:
+            df["risk_label"] = (df["risk_probability"] >= 0.5).astype(int)
+        _cache["all_assets"] = df
+        return df
+
     def _load_system(fname: str, system: str) -> pd.DataFrame:
         p = os.path.join(DATA_DIR, fname)
         if not os.path.exists(p):
@@ -270,8 +281,17 @@ def _load_all_assets() -> pd.DataFrame:
     dur_input["risk_probability"] = unified["risk_probability"]
     dur_input = dur_input[dur_features]
     unified["est_maintenance_hrs"] = dur_pipeline.predict(dur_input)
+    if "risk_label" not in unified.columns:
+        unified["risk_label"] = (unified["risk_probability"] >= 0.5).astype(int)
 
+    try:
+        unified.to_csv(precalculated_path, index=False)
+    except Exception:
+        pass
+
+    _cache["all_assets"] = unified
     return unified
+
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
