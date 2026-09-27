@@ -9,28 +9,15 @@
 *.env
 
 # ── Synthetic Data & Generated Output Files ───────────────────────────────────
-# Ignore generated CSV datasets and schedule outputs
-data/*.csv
-data/*.json
+# data/*.csv
+# data/*.json
 !data/.gitkeep
 
-# Specific generated data files
-data/tms_data.csv
-data/smms_data.csv
-data/tdms_data.csv
-data/coa_data.csv
-data/optimized_schedule.json
-
 # ── Trained Model Artifacts (.pkl, .joblib, etc.) ─────────────────────────────
-models/*.pkl
-models/*.joblib
-models/*.pth
-models/*.onnx
+# models/*.pkl
+# models/*.joblib
 !models/.gitkeep
 
-# Specific model binaries
-models/risk_model.pkl
-models/duration_model.pkl
 
 # ── Reports & Generated Visualizations ────────────────────────────────────────
 reports/*.png
