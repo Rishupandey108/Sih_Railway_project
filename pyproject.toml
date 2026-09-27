@@ -7,7 +7,7 @@ name = "sih-railway-project"
 version = "0.1.0"
 description = "Indian Railways Predictive Maintenance AI System"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "pandas>=2.0.0",
     "numpy>=1.26.0",
